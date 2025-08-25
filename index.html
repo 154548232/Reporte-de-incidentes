@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formato de Registro de Incidente de Seguridad</title>
+    
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <div class="container" id="form-container">
+        <h1>📋 Formato Mejorado de Registro de Incidente de Seguridad de la Información</h1>
+        
+        <div class="section" id="incident-section">
+            <h2>🔍 Identificación del Incidente</h2>
+            <div class="form-group">
+                <label for="fecha-incidente">Fecha del incidente (DD-MM-AAAA):</label>
+                <input type="date" id="fecha-incidente" required>
+            </div>
+            <div class="form-group">
+                <label for="numero-incidente">Número de incidente:</label>
+                <input type="text" id="numero-incidente" placeholder="Se asigna automáticamente" readonly>
+            </div>
+            <div class="form-group new-field">
+                <label for="severidad">🚨 Nivel de Severidad:</label>
+                <div class="priority-selector">
+                    <div class="priority-option priority-critical-opt" data-priority="critical">
+                        <div>CRÍTICO</div>
+                        <small>&lt; 1 hora</small>
+                    </div>
+                    <div class="priority-option priority-high-opt" data-priority="high">
+                        <div>ALTO</div>
+                        <small>&lt; 4 horas</small>
+                    </div>
+                    <div class="priority-option priority-medium-opt" data-priority="medium">
+                        <div>MEDIO</div>
+                        <small>&lt; 24 horas</small>
+                    </div>
+                    <div class="priority-option priority-low-opt" data-priority="low">
+                        <div>BAJO</div>
+                        <small>&lt; 72 horas</small>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group new-field">
+                <label for="estado-incidente">📊 Estado Actual:</label>
+                <select id="estado-incidente">
+                    <option value="nuevo">🆕 Nuevo</option>
+                    <option value="asignado">👤 Asignado</option>
+                    <option value="en-progreso">⚡ En Progreso</option>
+                    <option value="contenido">🛡️ Contenido</option>
+                    <option value="resuelto">✅ Resuelto</option>
+                    <option value="cerrado">📁 Cerrado</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>👤 Información del Reportante</h2>
+            <div class="form-group">
+                <label for="nombre-reportante">Nombre completo:</label>
+                <input type="text" id="nombre-reportante" required>
+            </div>
+            <div class="form-group">
+                <label for="email-reportante">Correo electrónico:</label>
+                <input type="email" id="email-reportante" required>
+            </div>
+            <div class="form-group">
+                <label for="telefono-reportante">Teléfono:</label>
+                <input type="tel" id="telefono-reportante">
+            </div>
+            <div class="form-group">
+                <label for="dependencia-reportante">Dependencia/Organización:</label>
+                <input type="text" id="dependencia-reportante" required>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🚑 Primer Respondiente</h2>
+            <div class="form-group">
+                <label for="nombre-respondiente">Nombre completo:</label>
+                <input type="text" id="nombre-respondiente">
+            </div>
+            <div class="form-group">
+                <label for="email-respondiente">Correo electrónico:</label>
+                <input type="email" id="email-respondiente">
+            </div>
+            <div class="form-group new-field">
+                <label for="tiempo-respuesta">⏱️ Tiempo de Primera Respuesta:</label>
+                <input type="text" id="tiempo-respuesta" placeholder="ej: 15 minutos">
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>📝 Descripción Detallada del Incidente</h2>
+            <div class="form-group full-width">
+                <label for="que-ocurrio">¿Qué ocurrió?</label>
+                <textarea id="que-ocurrio" placeholder="Describa los hechos observados al momento de identificar el incidente" required></textarea>
+            </div>
+            <div class="form-group full-width">
+                <label for="como-ocurrio">¿Cómo ocurrió?</label>
+                <textarea id="como-ocurrio" placeholder="Describa el vector de ataque o la forma como se presume que se generó el incidente"></textarea>
+            </div>
+            <div class="form-group full-width">
+                <label for="por-que-ocurrio">¿Por qué ocurrió?</label>
+                <textarea id="por-que-ocurrio" placeholder="Análisis de causa raíz - explique las razones por las cuales ocurrió el incidente"></textarea>
+            </div>
+            <div class="form-group full-width new-field">
+                <label for="iocs">🔍 Indicadores de Compromiso (IoCs):</label>
+                <textarea id="iocs" placeholder="IPs maliciosas, hashes de malware, dominios sospechosos, etc."></textarea>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>💥 Análisis de Impacto</h2>
+            <div class="form-group full-width">
+                <label for="elementos-afectados">🎯 Activos de información afectados:</label>
+                <textarea id="elementos-afectados" placeholder="Describa los sistemas, aplicaciones, datos o servicios afectados"></textarea>
+            </div>
+            <div class="form-group new-field">
+                <label for="usuarios-impactados">👥 Número estimado de usuarios impactados:</label>
+                <input type="number" id="usuarios-impactados" min="0">
+            </div>
+            <div class="form-group new-field">
+                <label for="valor-monetario">💰 Impacto monetario estimado (COP):</label>
+                <input type="number" id="valor-monetario" min="0" placeholder="0">
+            </div>
+            <div class="impact-matrix">
+                <div class="impact-item">
+                    <div>CONFIDENCIALIDAD</div>
+                    <select><option>Sin impacto</option><option>Bajo</option><option>Medio</option><option>Alto</option></select>
+                </div>
+                <div class="impact-item">
+                    <div>INTEGRIDAD</div>
+                    <select><option>Sin impacto</option><option>Bajo</option><option>Medio</option><option>Alto</option></select>
+                </div>
+                <div class="impact-item">
+                    <div>DISPONIBILIDAD</div>
+                    <select><option>Sin impacto</option><option>Bajo</option><option>Medio</option><option>Alto</option></select>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>⏰ Cronología del Incidente</h2>
+            <div class="form-group">
+                <label for="fecha-ocurrencia">🕐 Fecha/hora estimada de ocurrencia:</label>
+                <input type="datetime-local" id="fecha-ocurrencia">
+            </div>
+            <div class="form-group">
+                <label for="fecha-deteccion">🔍 Fecha/hora de detección:</label>
+                <input type="datetime-local" id="fecha-deteccion">
+            </div>
+            <div class="form-group">
+                <label for="fecha-reporte">📢 Fecha/hora de reporte:</label>
+                <input type="datetime-local" id="fecha-reporte">
+            </div>
+            <div class="form-group new-field">
+                <label for="fecha-contencion">🛡️ Fecha/hora de contención:</label>
+                <input type="datetime-local" id="fecha-contencion">
+            </div>
+            <div class="form-group new-field">
+                <label>⏱️ Métricas de Tiempo:</label>
+                <div class="metrics-grid">
+                    <div><strong>MTTD:</strong><input type="text" id="mttd-output" placeholder="Tiempo para detectar" readonly></div>
+                    <div><strong>MTTR:</strong><input type="text" id="mttr-output" placeholder="Tiempo para responder" readonly></div>
+                    <div><strong>MTTC:</strong><input type="text" id="mttc-output" placeholder="Tiempo para contener" readonly></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🏷️ Categorización del Incidente</h2>
+            <div class="checkbox-group">
+                <div class="checkbox-item"><input type="checkbox" id="malware"><label for="malware">🦠 Software Malicioso</label></div>
+                <div class="checkbox-item"><input type="checkbox" id="phishing"><label for="phishing">🎣 Phishing/Ingeniería Social</label></div>
+                <div class="checkbox-item"><input type="checkbox" id="dos"><label for="dos">⚡ Denegación de Servicio</label></div>
+                <div class="checkbox-item"><input type="checkbox" id="acceso-no-autorizado"><label for="acceso-no-autorizado">🚪 Acceso No Autorizado</label></div>
+                <div class="checkbox-item"><input type="checkbox" id="fuga-datos"><label for="fuga-datos">💧 Fuga de Información</label></div>
+                <div class="checkbox-item"><input type="checkbox" id="falla-sistema"><label for="falla-sistema">💻 Falla de Sistema</label></div>
+                <div class="checkbox-item new-field"><input type="checkbox" id="ransomware"><label for="ransomware">🔒 Ransomware</label></div>
+                <div class="checkbox-item new-field"><input type="checkbox" id="apt"><label for="apt">🎯 APT (Amenaza Persistente Avanzada)</label></div>
+                <div class="checkbox-item new-field"><input type="checkbox" id="error-humano"><label for="error-humano">👤 Error Humano</label></div>
+            </div>
+        </div>
+
+        <div class="section new-field">
+            <h2>🔬 Evidencia Digital y Análisis Forense</h2>
+            <div class="evidence-section">
+                <div class="form-group"><label for="evidencia-recolectada">📁 Evidencia recolectada:</label><textarea id="evidencia-recolectada" placeholder="Logs, imágenes forenses, etc."></textarea></div>
+                <div class="form-group"><label for="herramientas-analisis">🔧 Herramientas utilizadas:</label><input type="text" id="herramientas-analisis" placeholder="ej: Wireshark, Volatility, FTK"></div>
+                <div class="form-group"><label for="cadena-custodia">📋 Responsable de cadena de custodia:</label><input type="text" id="cadena-custodia"></div>
+                <div class="form-group"><label for="ubicacion-evidencia">📍 Ubicación de evidencia:</label><input type="text" id="ubicacion-evidencia" placeholder="Servidor, carpeta o sistema"></div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>🛠️ Acciones de Respuesta al Incidente</h2>
+            <div class="timeline-item"><div class="form-group full-width"><label for="acciones-identificacion">🔍 Acciones de Identificación:</label><textarea id="acciones-identificacion"></textarea></div></div>
+            <div class="timeline-item"><div class="form-group full-width"><label for="acciones-contencion">🛡️ Acciones de Contención:</label><textarea id="acciones-contencion"></textarea></div></div>
+            <div class="timeline-item"><div class="form-group full-width"><label for="acciones-erradicacion">🗑️ Acciones de Erradicación:</label><textarea id="acciones-erradicacion"></textarea></div></div>
+            <div class="timeline-item"><div class="form-group full-width"><label for="acciones-recuperacion">🔄 Acciones de Recuperación:</label><textarea id="acciones-recuperacion"></textarea></div></div>
+        </div>
+
+        <div class="section">
+            <h2>🎓 Lecciones Aprendidas y Mejoras</h2>
+            <div class="form-group full-width"><label for="lecciones-aprendidas">💡 Principales lecciones aprendidas:</label><textarea id="lecciones-aprendidas"></textarea></div>
+            <div class="form-group full-width new-field"><label for="acciones-mejora">🚀 Plan de mejoras:</label><textarea id="acciones-mejora"></textarea></div>
+            <div class="form-group new-field"><label for="actualizacion-controles">🔧 Controles que requieren actualización:</label><textarea id="actualizacion-controles"></textarea></div>
+            <div class="form-group new-field"><label for="fecha-revision">📅 Fecha de revisión post-incidente:</label><input type="date" id="fecha-revision"></div>
+        </div>
+
+        <div class="section">
+            <h2>📢 Notificaciones y Comunicaciones</h2>
+            <div class="form-group new-field">
+                <label>🚨 Notificaciones Regulatorias Requeridas:</label>
+                <div class="checkbox-group">
+                    <div class="checkbox-item"><input type="checkbox" id="notif-sic"><label for="notif-sic">SIC</label></div>
+                    <div class="checkbox-item"><input type="checkbox" id="notif-policia"><label for="notif-policia">Policía Nacional - CAI Virtual</label></div>
+                    <div class="checkbox-item"><input type="checkbox" id="notif-csirt"><label for="notif-csirt">CSIRT Gobierno</label></div>
+                    <div class="checkbox-item"><input type="checkbox" id="notif-other"><label for="notif-other">Otros organismos</label></div>
+                </div>
+            </div>
+            <div class="form-group full-width"><label for="comunicacion-externa">📞 Comunicaciones externas:</label><textarea id="comunicacion-externa" placeholder="Autoridades, clientes, medios, etc."></textarea></div>
+        </div>
+
+        <div class="signature-section">
+            <div class="signature-box"><h3>✍️ Elaboró</h3><div class="signature-line"></div><p><strong>Nombre:</strong> ________</p><p><strong>Fecha:</strong> ________</p></div>
+            <div class="signature-box"><h3>👁️ Revisó</h3><div class="signature-line"></div><p><strong>Nombre:</strong> ________</p><p><strong>Fecha:</strong> ________</p></div>
+            <div class="signature-box"><h3>✅ Aprobó</h3><div class="signature-line"></div><p><strong>Nombre:</strong> ________</p><p><strong>Fecha:</strong> ________</p></div>
+        </div>
+
+        <div class="button-container">
+            <button id="generate-pdf-btn">📄 Generar PDF del Reporte</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
